@@ -141,8 +141,8 @@ public class Employe implements Serializable, Comparable<Employe> {
 		this.mail = mail;
 	}
 
-	public long getId() {
-		return this.serialVersionUID;
+	public String getPassword() {
+		return this.password;
 	}
 
 	/**

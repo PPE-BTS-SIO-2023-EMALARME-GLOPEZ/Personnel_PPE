@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sound.midi.Instrument;
+
 import personnel.*;
 
 public class JDBC implements Passerelle {
@@ -67,6 +69,20 @@ public class JDBC implements Passerelle {
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 			throw new SauvegardeImpossible(exception);
+		}
+	}
+
+	public void setRoot(Employe root) {
+		try {
+			PreparedStatement requete = connection.prepareStatement(
+					"insert into employe (nom_employe, prenom_employe, mail, password) values(?,?,?,?)");
+			requete.setString(1, root.getNom());
+			requete.setString(2, root.getPrenom());
+			requete.setString(3, root.getMail());
+			requete.setString(4, root.getPassword());
+			requete.executeUpdate();
+		} catch (SQLException exception) {
+			exception.printStackTrace();
 		}
 	}
 }
