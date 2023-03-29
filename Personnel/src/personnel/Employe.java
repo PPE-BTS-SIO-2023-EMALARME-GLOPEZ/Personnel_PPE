@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 public class Employe implements Serializable, Comparable<Employe> {
 	private static final long serialVersionUID = 4795721718037994734L;
+	private int id = -1;
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
@@ -143,6 +144,26 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public String getPassword() {
 		return this.password;
+	}
+
+	/**
+	 * Retourne l'ID de l'employe
+	 * 
+	 * @return l'ID de l'employe
+	 */
+	public int getId() {
+		return this.id;
+	}
+
+	/**
+	 * Fixe l'ID de l'employe, cet ID doit être celui retourné par JDBC
+	 * après enregistrement de la l'employe dans la base de donnée.
+	 * Cette méthode ne doit être utilisée que par la classe EmployeDAO
+	 * 
+	 * @param id l'identifiant de l'employe en base de donnée
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
