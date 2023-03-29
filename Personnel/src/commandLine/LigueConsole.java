@@ -99,6 +99,7 @@ public class LigueConsole {
 		Menu menu = new Menu("Choisissez le type de contrat :", "ajouter un employé", "a");
 		menu.add(contratCdiOption(ligue));
 		menu.add(contratCddOption(ligue));
+		menu.setAutoBack(true);
 		menu.addBack("q");
 		return menu;
 	}
