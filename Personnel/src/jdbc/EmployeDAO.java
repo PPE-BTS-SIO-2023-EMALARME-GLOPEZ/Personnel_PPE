@@ -82,4 +82,40 @@ public class EmployeDAO {
             instruction.close();
         }
     }
+
+    public void delete(Employe employe) throws SQLException {
+        String requete = "DELETE FROM employe WHERE id = ?";
+        PreparedStatement instruction = connection.prepareStatement(requete);
+        instruction.setInt(1, employe.getId());
+        instruction.executeUpdate();
+    }
+
+    /**
+     * Récupère l'employé qui est administrateur de la ligue spécifiée.
+     * 
+     * @param ligue la ligue pour laquelle on veut récupérer l'administrateur
+     * @return un objet ResultSet contenant les informations sur l'employé
+     *         administrateur, ou null si aucun employé correspondant n'a été trouvé
+     * @throws SQLException si une erreur se produit lors de la requête SQL
+     */
+    public ResultSet getAdministrateur(Ligue ligue) throws SQLException {
+
+        String requete = "SELECT * FROM employe where id_employe = ?";
+        PreparedStatement instruction = null;
+        ResultSet resultat = null;
+
+        try {
+            instruction = connection.prepareStatement(requete);
+            instruction.setInt(1, ligue.getAdministrateur().getId());
+            resultat = instruction.executeQuery();
+
+        } catch (SQLException exception) {
+            System.out.println("Erreur lors de la récupération de l'administrateur : " + exception.getMessage());
+        } finally {
+            instruction.close();
+            resultat.close();
+        }
+        return resultat;
+    }
+
 }

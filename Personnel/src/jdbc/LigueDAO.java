@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import personnel.*;
 
@@ -16,6 +18,30 @@ public class LigueDAO {
     public LigueDAO(Connection connection) {
         this.connection = connection;
     }
+
+    /*
+     * public TreeSet<Ligue> init() {
+     * 
+     * SortedSet<Ligue> ligues = new TreeSet<>();
+     * String requete = "SELECT * FROM ligue";
+     * PreparedStatement instruction = null;
+     * ResultSet resultSet = null;
+     * 
+     * try {
+     * instruction = connection.prepareStatement(requete);
+     * resultSet = instruction.executeQuery();
+     * 
+     * while(resultSet.next())
+     * {
+     * int id = resultSet.getInt("id_ligue");
+     * String nom = resultSet.getString("nom_ligue");
+     * Employe administrateur = resultSet.getInt("administrateur");
+     * Ligue ligue = new Ligue();
+     * }
+     * 
+     * }
+     * }
+     */
 
     public void insert(Ligue ligue) throws SQLException {
         String requete = "INSERT INTO ligue (nom_ligue, administrateur) VALUES (?, ?)";

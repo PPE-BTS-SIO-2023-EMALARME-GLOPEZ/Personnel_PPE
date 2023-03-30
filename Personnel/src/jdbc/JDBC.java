@@ -83,4 +83,8 @@ public class JDBC implements Passerelle {
 			exception.printStackTrace();
 		}
 	}
+
+	public Connection getConnection() {
+		return this.connection;
+	}
 }
