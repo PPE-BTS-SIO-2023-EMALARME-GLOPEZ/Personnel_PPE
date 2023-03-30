@@ -18,20 +18,19 @@ public class LigueDAO {
 
     public TreeSet<Ligue> init() {
 
-        TreeSet<Ligue> ligues = new TreeSet<>();
         String requete = "SELECT * FROM ligue";
-        PreparedStatement instruction = null;
-        ResultSet resultSet = null;
 
-        try {
-            instruction = connection.prepareStatement(requete);
-            resultSet = instruction.executeQuery();
+        try (PreparedStatement instruction = connection.prepareStatement(requete);
+                ResultSet resultSet = instruction.executeQuery()) {
+
+            TreeSet<Ligue> ligues = new TreeSet<>();
 
             while (resultSet.next()) {
                 // Création de la ligue
                 GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
                 int id = resultSet.getInt("id_ligue");
                 String nom = resultSet.getString("nom_ligue");
+
                 Ligue ligue = new Ligue(gestionPersonnel, id, nom);
 
                 // Ajout des employes
@@ -48,26 +47,12 @@ public class LigueDAO {
                 ligues.add(ligue);
             }
 
+            return ligues;
+
         } catch (SQLException exception) {
             System.out.println("Erreur lors de l'initialisation des ligues : " + exception.getMessage());
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException exception) {
-                    System.out.println("Erreur lors de la fermeture du ResultSet : " + exception.getMessage());
-                }
-            }
-            if (instruction != null) {
-                try {
-                    instruction.close();
-                } catch (SQLException exception) {
-                    System.out.println("Erreur lors de la fermeture de l'instruction : " + exception.getMessage());
-                }
-            }
+            return new TreeSet<>();
         }
-
-        return ligues;
     }
 
     public void insert(Ligue ligue) throws SQLException {
