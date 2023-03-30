@@ -3,6 +3,8 @@ package personnel;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import jdbc.EmployeDAO;
+
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent
  * être administrateurs des employés de leur ligue.
@@ -67,6 +69,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setDateDepart(LocalDate dateDepart) {
 		this.dateDepart = dateDepart;
+		EmployeDAO.connect().update(this);
 	}
 
 	public LocalDate getDateDepart() {
@@ -115,6 +118,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setNom(String nom) {
 		this.nom = nom;
+		EmployeDAO.connect().update(this);
 	}
 
 	/**
@@ -135,6 +139,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+		EmployeDAO.connect().update(this);
 	}
 
 	/**
@@ -155,6 +160,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+		EmployeDAO.connect().update(this);
 	}
 
 	public String getPassword() {
@@ -179,6 +185,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 	 */
 	public void setId(int id) {
 		this.id = id;
+		EmployeDAO.connect().update(this);
 	}
 
 	/**
@@ -202,6 +209,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setPassword(String password) {
 		this.password = password;
+		EmployeDAO.connect().update(this);
 	}
 
 	/**

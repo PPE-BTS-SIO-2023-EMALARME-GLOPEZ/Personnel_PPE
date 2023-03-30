@@ -91,6 +91,7 @@ public class GestionPersonnel implements Serializable {
 	public Ligue addLigue(int id, String nom) {
 		Ligue ligue = new Ligue(this, id, nom);
 		ligues.add(ligue);
+		LigueDAO.connect().insert(ligue);
 		return ligue;
 	}
 

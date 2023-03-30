@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import personnel.*;
@@ -28,7 +27,7 @@ public class EmployeDAO {
         return localDate != null ? Date.valueOf(localDate) : null;
     }
 
-    public void insert(Employe employe) throws SQLException {
+    public void insert(Employe employe) {
 
         String requete = "INSERT INTO employe (nom_employe, prenom_employe, password, mail, date_arrivee, date_depart, id_ligue) VALUES (?,?,?,?,?,?,?)";
         PreparedStatement instruction = null;
@@ -59,12 +58,24 @@ public class EmployeDAO {
         } catch (SQLException exception) {
             System.out.println("Erreur lors de l'insertion de l'employé : " + exception.getMessage());
         } finally {
-            instruction.close();
-            resultSet.close();
+            if (instruction != null) {
+                try {
+                    instruction.close();
+                } catch (SQLException exception) {
+                    System.out.println("Erreur lors de l'insertion de l'employé : " + exception.getMessage());
+                }
+            }
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException exception) {
+                    System.out.println("Erreur lors de l'insertion de l'employé : " + exception.getMessage());
+                }
+            }
         }
     }
 
-    public void update(Employe employe) throws SQLException {
+    public void update(Employe employe) {
 
         PreparedStatement instruction = null;
         String requete = "UPDATE employe SET nom_employe = ?, prenom_employe = ?, password = ?, mail = ?, date_depart = ?, date_arrivee = ?, id_ligue = ? WHERE id_employe = ? ";
@@ -86,26 +97,47 @@ public class EmployeDAO {
         } catch (SQLException exception) {
             System.out.println("Erreur lors de la modification de l'employé : " + exception.getMessage());
         } finally {
-            instruction.close();
+            if (instruction != null) {
+                try {
+                    instruction.close();
+                } catch (SQLException e) {
+                    System.out.println("Erreur lors de la modification de l'employé : " + e.getMessage());
+                }
+            }
         }
     }
 
-    public void delete(Employe employe) throws SQLException {
+    public void delete(Employe employe) {
         String requete = "DELETE FROM employe WHERE id = ?";
-        PreparedStatement instruction = connection.prepareStatement(requete);
-        instruction.setInt(1, employe.getId());
-        instruction.executeUpdate();
+        PreparedStatement instruction = null;
+        try {
+            instruction = connection.prepareStatement(requete);
+            instruction.setInt(1, employe.getId());
+            instruction.executeUpdate();
+        } catch (SQLException exception) {
+            System.out.println("Erreur lors de la suppression de l'employé : " + exception.getMessage());
+        } finally {
+            if (instruction != null) {
+                try {
+                    instruction.close();
+                } catch (Exception exception) {
+                    System.out.println("Erreur lors de la suppression de l'employé : " + exception.getMessage());
+                }
+            }
+        }
     }
 
-    public TreeSet<Employe> getEmployesByLigue(Ligue ligue) throws SQLException {
+    public TreeSet<Employe> getEmployesByLigue(Ligue ligue) {
         String requete = "SELECT * FROM employe WHERE ligue_id = ?";
         TreeSet<Employe> employes = new TreeSet<>();
         GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+        PreparedStatement instruction = null;
+        ResultSet resultSet = null;
 
         try {
-            PreparedStatement instruction = connection.prepareStatement(requete);
+            instruction = connection.prepareStatement(requete);
             instruction.setInt(1, ligue.getId());
-            ResultSet resultSet = instruction.executeQuery();
+            resultSet = instruction.executeQuery();
 
             while (resultSet.next()) {
                 // On récupére les données de l'employe
@@ -126,6 +158,21 @@ public class EmployeDAO {
             }
         } catch (SQLException exception) {
             System.out.println("Erreur lors de la récupération des employés : " + exception.getMessage());
+        } finally {
+            if (instruction != null) {
+                try {
+                    instruction.close();
+                } catch (Exception exception) {
+                    System.out.println("Erreur lors de la récupération des employés : " + exception.getMessage());
+                }
+            }
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (Exception exception) {
+                    System.out.println("Erreur lors de la récupération des employés : " + exception.getMessage());
+                }
+            }
         }
 
         return employes;
