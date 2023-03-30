@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 
 import personnel.GestionPersonnel;
 import personnel.Ligue;
+import personnel.Employe;
 import personnel.SauvegardeImpossible;
 
 public class Serialization implements personnel.Passerelle {
