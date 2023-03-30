@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import jdbc.JDBC;
 
 /**
  * Gestion du personnel. Un seul objet de cette classe existe.
@@ -21,8 +22,9 @@ public class GestionPersonnel implements Serializable {
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
 	private Employe root = new Employe(this, null, "root", "", "", "toor");
-	public final static int SERIALIZATION = 1, JDBC = 2, TYPE_PASSERELLE = 2;
-	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC()
+	public final static int SERIALIZATION = 1, JDBC = 2;
+	public static int TYPE_PASSERELLE = JDBC;
+	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new JDBC()
 			: new serialisation.Serialization();
 
 	/**
@@ -109,6 +111,10 @@ public class GestionPersonnel implements Serializable {
 	}
 
 	private void setRoot() {
-		GestionPersonnel.passerelle.setRoot(root);
+		try {
+			GestionPersonnel.passerelle.setRoot(root);
+		} catch (SauvegardeImpossible exception) {
+			System.out.println("Erreur lors de la sauvegarde du root : " + exception.getMessage());
+		}
 	}
 }
