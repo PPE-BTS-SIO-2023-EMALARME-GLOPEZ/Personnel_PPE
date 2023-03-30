@@ -19,6 +19,11 @@ public class EmployeDAO {
         this.connection = connection;
     }
 
+    public static EmployeDAO connect() {
+        JDBC jdbc = new JDBC();
+        return new EmployeDAO(jdbc.getConnection());
+    }
+
     private static Date toSqlDate(LocalDate localDate) {
         return localDate != null ? Date.valueOf(localDate) : null;
     }

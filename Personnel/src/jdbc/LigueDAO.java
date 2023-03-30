@@ -16,6 +16,11 @@ public class LigueDAO {
         this.connection = connection;
     }
 
+    public static LigueDAO connect() {
+        JDBC jdbc = new JDBC();
+        return new LigueDAO(jdbc.getConnection());
+    }
+
     public TreeSet<Ligue> init() {
 
         String requete = "SELECT * FROM ligue";
