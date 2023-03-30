@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jdbc.LigueDAO;
+
 /**
  * Représente une ligue. Chaque ligue est reliée à une liste
  * d'employés dont un administrateur. Comme il n'est pas possible
@@ -64,6 +66,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 
 	public void setNom(String nom) {
 		this.nom = nom;
+		LigueDAO.connect().update(this);
 	}
 
 	/**
@@ -90,6 +93,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		if (administrateur != root && administrateur.getLigue() != this)
 			throw new DroitsInsuffisants();
 		this.administrateur = administrateur;
+		LigueDAO.connect().update(this);
 	}
 
 	/**
@@ -154,6 +158,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 
 	public void remove() {
 		gestionPersonnel.remove(this);
+		System.out.println(this);
 	}
 
 	/**
@@ -174,6 +179,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	 */
 	public void setId(int id) {
 		this.id = id;
+		LigueDAO.connect().update(this);
 	}
 
 	@Override

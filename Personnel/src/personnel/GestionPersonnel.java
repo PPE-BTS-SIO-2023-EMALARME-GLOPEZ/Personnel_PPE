@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import jdbc.JDBC;
+import jdbc.LigueDAO;
 
 /**
  * Gestion du personnel. Un seul objet de cette classe existe.
@@ -83,6 +84,7 @@ public class GestionPersonnel implements Serializable {
 	public Ligue addLigue(String nom) throws SauvegardeImpossible {
 		Ligue ligue = new Ligue(this, nom);
 		ligues.add(ligue);
+		LigueDAO.connect().insert(ligue);
 		return ligue;
 	}
 
@@ -94,6 +96,7 @@ public class GestionPersonnel implements Serializable {
 
 	void remove(Ligue ligue) {
 		ligues.remove(ligue);
+		LigueDAO.connect().delete(ligue);
 	}
 
 	int insert(Ligue ligue) throws SauvegardeImpossible {
