@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jdbc.EmployeDAO;
 import jdbc.LigueDAO;
 
 /**
@@ -137,6 +138,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	{
 		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password);
 		employes.add(employe);
+		EmployeDAO.connect().insert(employe);
 		return employe;
 	}
 
@@ -144,11 +146,13 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateFinContrat) {
 		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateFinContrat);
 		employes.add(employe);
+		EmployeDAO.connect().insert(employe);
 		return employe;
 	}
 
 	public void removeEmploye(Employe employe) {
 		employes.remove(employe);
+		EmployeDAO.connect().delete(employe);
 	}
 
 	/**

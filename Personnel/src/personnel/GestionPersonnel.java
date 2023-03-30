@@ -84,14 +84,12 @@ public class GestionPersonnel implements Serializable {
 	public Ligue addLigue(String nom) throws SauvegardeImpossible {
 		Ligue ligue = new Ligue(this, nom);
 		ligues.add(ligue);
-		LigueDAO.connect().insert(ligue);
 		return ligue;
 	}
 
 	public Ligue addLigue(int id, String nom) {
 		Ligue ligue = new Ligue(this, id, nom);
 		ligues.add(ligue);
-		LigueDAO.connect().insert(ligue);
 		return ligue;
 	}
 
