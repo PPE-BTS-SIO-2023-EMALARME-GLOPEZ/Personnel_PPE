@@ -1,12 +1,9 @@
 package jdbc;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import personnel.*;
@@ -19,29 +16,59 @@ public class LigueDAO {
         this.connection = connection;
     }
 
-    /*
-     * public TreeSet<Ligue> init() {
-     * 
-     * SortedSet<Ligue> ligues = new TreeSet<>();
-     * String requete = "SELECT * FROM ligue";
-     * PreparedStatement instruction = null;
-     * ResultSet resultSet = null;
-     * 
-     * try {
-     * instruction = connection.prepareStatement(requete);
-     * resultSet = instruction.executeQuery();
-     * 
-     * while(resultSet.next())
-     * {
-     * int id = resultSet.getInt("id_ligue");
-     * String nom = resultSet.getString("nom_ligue");
-     * Employe administrateur = resultSet.getInt("administrateur");
-     * Ligue ligue = new Ligue();
-     * }
-     * 
-     * }
-     * }
-     */
+    public TreeSet<Ligue> init() {
+
+        TreeSet<Ligue> ligues = new TreeSet<>();
+        String requete = "SELECT * FROM ligue";
+        PreparedStatement instruction = null;
+        ResultSet resultSet = null;
+
+        try {
+            instruction = connection.prepareStatement(requete);
+            resultSet = instruction.executeQuery();
+
+            while (resultSet.next()) {
+                // Création de la ligue
+                GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+                int id = resultSet.getInt("id_ligue");
+                String nom = resultSet.getString("nom_ligue");
+                Ligue ligue = new Ligue(gestionPersonnel, id, nom);
+
+                // Ajout des employes
+                EmployeDAO employeDAO = new EmployeDAO(connection);
+                TreeSet<Employe> employes = employeDAO.getEmployesByLigue(ligue);
+                ligue.initEmployes(employes);
+
+                // Ajout de l'administrateur
+                int idAdministrateur = resultSet.getInt("administrateur");
+                Employe admin = ligue.getEmployeById(idAdministrateur);
+                ligue.setAdministrateur(admin);
+
+                // Ajout de la ligue à la liste des ligues
+                ligues.add(ligue);
+            }
+
+        } catch (SQLException exception) {
+            System.out.println("Erreur lors de l'initialisation des ligues : " + exception.getMessage());
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException exception) {
+                    System.out.println("Erreur lors de la fermeture du ResultSet : " + exception.getMessage());
+                }
+            }
+            if (instruction != null) {
+                try {
+                    instruction.close();
+                } catch (SQLException exception) {
+                    System.out.println("Erreur lors de la fermeture de l'instruction : " + exception.getMessage());
+                }
+            }
+        }
+
+        return ligues;
+    }
 
     public void insert(Ligue ligue) throws SQLException {
         String requete = "INSERT INTO ligue (nom_ligue, administrateur) VALUES (?, ?)";

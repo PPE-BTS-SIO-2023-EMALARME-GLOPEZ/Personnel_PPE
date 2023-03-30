@@ -34,12 +34,16 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		this.id = gestionPersonnel.insert(this);
 	}
 
-	Ligue(GestionPersonnel gestionPersonnel, int id, String nom) {
+	public Ligue(GestionPersonnel gestionPersonnel, int id, String nom) {
 		this.nom = nom;
 		employes = new TreeSet<>();
 		this.gestionPersonnel = gestionPersonnel;
 		administrateur = gestionPersonnel.getRoot();
 		this.id = id;
+	}
+
+	public void initEmployes(TreeSet<Employe> employes) {
+		this.employes = employes;
 	}
 
 	/**
@@ -105,6 +109,15 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		return employesList;
 	}
 
+	public Employe getEmployeById(int id) {
+		for (Employe employe : employes) {
+			if (employe.getId() == id) {
+				return employe;
+			}
+		}
+		return null; // si aucun employé avec cet ID n'est trouvé
+	}
+
 	/**
 	 * // * Ajoute un employé dans la ligue. Cette méthode
 	 * est le seul moyen de créer un employé.
@@ -123,10 +136,8 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		return employe;
 	}
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateFinContrat) // Contrat
-																													// en
-																													// CDI
-	{
+	// Contrat en CDI
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateFinContrat) {
 		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateFinContrat);
 		employes.add(employe);
 		return employe;

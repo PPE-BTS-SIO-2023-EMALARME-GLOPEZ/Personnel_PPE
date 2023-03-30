@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import personnel.*;
 
@@ -90,32 +92,38 @@ public class EmployeDAO {
         instruction.executeUpdate();
     }
 
-    /**
-     * Récupère l'employé qui est administrateur de la ligue spécifiée.
-     * 
-     * @param ligue la ligue pour laquelle on veut récupérer l'administrateur
-     * @return un objet ResultSet contenant les informations sur l'employé
-     *         administrateur, ou null si aucun employé correspondant n'a été trouvé
-     * @throws SQLException si une erreur se produit lors de la requête SQL
-     */
-    public ResultSet getAdministrateur(Ligue ligue) throws SQLException {
-
-        String requete = "SELECT * FROM employe where id_employe = ?";
-        PreparedStatement instruction = null;
-        ResultSet resultat = null;
+    public TreeSet<Employe> getEmployesByLigue(Ligue ligue) throws SQLException {
+        String requete = "SELECT * FROM employe WHERE ligue_id = ?";
+        TreeSet<Employe> employes = new TreeSet<>();
+        GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
 
         try {
-            instruction = connection.prepareStatement(requete);
-            instruction.setInt(1, ligue.getAdministrateur().getId());
-            resultat = instruction.executeQuery();
+            PreparedStatement instruction = connection.prepareStatement(requete);
+            instruction.setInt(1, ligue.getId());
+            ResultSet resultSet = instruction.executeQuery();
 
+            while (resultSet.next()) {
+                // On récupére les données de l'employe
+                String nom = resultSet.getString("nom_employe");
+                String prenom = resultSet.getString("prenom_employe");
+                String password = resultSet.getString("password");
+                String mail = resultSet.getString("mail");
+
+                LocalDate date_arrivee = resultSet.getDate("date_arrivee").toLocalDate();
+                LocalDate date_depart = resultSet.getDate("date_depart").toLocalDate();
+
+                // On crée l'employe
+                Employe employe = new Employe(gestionPersonnel, ligue, nom, prenom, mail, password, date_arrivee,
+                        date_depart);
+
+                // On ajoute l'employe a la liste des employes
+                employes.add(employe);
+            }
         } catch (SQLException exception) {
-            System.out.println("Erreur lors de la récupération de l'administrateur : " + exception.getMessage());
-        } finally {
-            instruction.close();
-            resultat.close();
+            System.out.println("Erreur lors de la récupération des employés : " + exception.getMessage());
         }
-        return resultat;
+
+        return employes;
     }
 
 }

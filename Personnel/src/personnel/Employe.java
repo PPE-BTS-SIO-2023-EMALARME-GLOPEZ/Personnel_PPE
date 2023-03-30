@@ -46,6 +46,21 @@ public class Employe implements Serializable, Comparable<Employe> {
 		this.dateDepart = dateDepart;
 	}
 
+	/* Employe JDBC constructor */
+	public Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail,
+			String password,
+			LocalDate dateArrivee, LocalDate dateDepart) {
+		this.gestionPersonnel = gestionPersonnel;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.password = password;
+		this.mail = mail;
+		this.ligue = ligue;
+		/* Date de départ fixée */
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = dateDepart;
+	}
+
 	public LocalDate getDateArrivee() {
 		return this.dateArrivee;
 	}
