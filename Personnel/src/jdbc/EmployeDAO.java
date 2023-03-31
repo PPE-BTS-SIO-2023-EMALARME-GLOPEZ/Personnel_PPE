@@ -14,13 +14,13 @@ public class EmployeDAO {
 
     private Connection connection;
 
-    public EmployeDAO(Connection connection) {
-        this.connection = connection;
+    public EmployeDAO() {
+        JDBC jdbc = (JDBC) GestionPersonnel.getPasserelle();
+        this.connection = jdbc.getConnection();
     }
 
     public static EmployeDAO connect() {
-        JDBC jdbc = new JDBC();
-        return new EmployeDAO(jdbc.getConnection());
+        return new EmployeDAO();
     }
 
     private static Date toSqlDate(LocalDate localDate) {
@@ -154,7 +154,9 @@ public class EmployeDAO {
                 // On crée l'employe
                 Employe employe = new Employe(gestionPersonnel, ligue, nom, prenom, mail, password, date_arrivee,
                         date_depart);
-
+                // On fixe l'id l'objet employe avec la valeur de sa clé primaire en base :
+                int id = resultSet.getInt("id_employe");
+                employe.setId(id);
                 // On ajoute l'employe a la liste des employes
                 employes.add(employe);
             }

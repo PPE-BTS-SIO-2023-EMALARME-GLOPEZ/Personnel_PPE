@@ -185,7 +185,6 @@ public class Employe implements Serializable, Comparable<Employe> {
 	 */
 	public void setId(int id) {
 		this.id = id;
-		EmployeDAO.connect().update(this);
 	}
 
 	/**
@@ -247,12 +246,13 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	@Override
 	public String toString() {
-		String res = nom + " " + prenom + " " + mail + " (";
+		String res = null;
 		if (estRoot())
-			res += "super-utilisateur )";
+			res += "(super-utilisateur )";
 		else
-			res += ligue.toString() + ")";
-		res += " arrivé le : " + dateArrivee + " depart le : " + dateDepart + "\n";
+			res += "(" + ligue.toString() + ")";
+
+		res += nom + " " + prenom + " " + mail + " arrivé le : " + dateArrivee + " depart le : " + dateDepart + "\n";
 		return res;
 	}
 }

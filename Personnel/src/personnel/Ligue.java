@@ -20,7 +20,7 @@ import jdbc.LigueDAO;
 
 public class Ligue implements Serializable, Comparable<Ligue> {
 	private static final long serialVersionUID = 1L;
-	private int id = -1;
+	private int id = -1; // Reste à -1 tant que l'objet n'est pas enregistré dans la BDD
 	private String nom;
 	private SortedSet<Employe> employes;
 	private Employe administrateur;
@@ -45,10 +45,7 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		this.id = id;
 	}
 
-	public void initEmployes(TreeSet<Employe> employes) {
-		System.err.println(
-				"[in Ligue initEmployes()] Nombre d'employes dans la ligue de " + this.getNom() + " : "
-						+ employes.size());
+	public void setListeEmployes(TreeSet<Employe> employes) {
 		this.employes = employes;
 	}
 
@@ -107,8 +104,6 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	 */
 
 	public SortedSet<Employe> getEmployes() {
-		System.err.println(
-				"[in Ligue getEmployes] Nombre d'employes dans la ligue de " + this.getNom() + " : " + employes.size());
 		return Collections.unmodifiableSortedSet(this.employes);
 	}
 

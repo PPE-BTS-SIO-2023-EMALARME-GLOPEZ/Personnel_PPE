@@ -41,13 +41,7 @@ public class LigueDAO {
                 // Ajout des employes
                 TreeSet<Employe> employes = EmployeDAO.connect().getEmployesByLigue(ligue);
 
-                // Test
-                for (Employe employe : employes) {
-                    System.err
-                            .println("[in LigueDAO init()] Employe :" + employe.getMail() + " ,nb employes : "
-                                    + employes.size());
-                }
-                ligue.initEmployes(employes);
+                ligue.setListeEmployes(employes);
 
                 // Ajout de l'administrateur
                 int idAdministrateur = resultSet.getInt("administrateur");
@@ -56,7 +50,7 @@ public class LigueDAO {
                 if (idAdministrateur == 0)
                     admin = gestionPersonnel.getRoot();
                 else {
-                    ligue.getEmployeById(idAdministrateur);
+                    admin = ligue.getEmployeById(idAdministrateur);
                     ligue.setAdministrateur(admin);
                 }
 
@@ -126,10 +120,8 @@ public class LigueDAO {
             instruction.setInt(1, ligue.getId());
             instruction.executeUpdate();
         } catch (SQLException exception) {
-            // Traiter l'exception localement, par exemple :
             System.err.println("Erreur lors de la suppression de la ligue : " + exception.getMessage());
         } finally {
-            // Fermer l'instruction pour libérer les ressources
             if (instruction != null) {
                 try {
                     instruction.close();
