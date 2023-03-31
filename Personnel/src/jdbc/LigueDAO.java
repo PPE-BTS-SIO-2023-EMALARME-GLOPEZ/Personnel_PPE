@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import personnel.*;
 
 public class LigueDAO {
@@ -17,8 +19,21 @@ public class LigueDAO {
     }
 
     public static LigueDAO connect() {
-        JDBC jdbc = new JDBC();
-        return new LigueDAO(jdbc.getConnection());
+        JDBC jdbc = (JDBC) GestionPersonnel.getPasserelle();
+        Connection connection = jdbc.getConnection();
+        return new LigueDAO(connection);
+    }
+
+    public static void disconnect() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Déconnexion réussie !");
+            } catch (SQLException e) {
+                System.out.println("Impossible de se déconnecter de la base de données.");
+                e.printStackTrace();
+            }
+        }
     }
 
     public TreeSet<Ligue> init() {
@@ -39,14 +54,26 @@ public class LigueDAO {
                 Ligue ligue = new Ligue(gestionPersonnel, id, nom);
 
                 // Ajout des employes
-                EmployeDAO employeDAO = new EmployeDAO(connection);
-                TreeSet<Employe> employes = employeDAO.getEmployesByLigue(ligue);
+                TreeSet<Employe> employes = EmployeDAO.connect().getEmployesByLigue(ligue);
+
+                // Test
+                for (Employe employe : employes) {
+                    System.err
+                            .println("[in LigueDAO init()] Employe :" + employe.getMail() + " ,nb employes : "
+                                    + employes.size());
+                }
                 ligue.initEmployes(employes);
 
                 // Ajout de l'administrateur
                 int idAdministrateur = resultSet.getInt("administrateur");
-                Employe admin = ligue.getEmployeById(idAdministrateur);
-                ligue.setAdministrateur(admin);
+
+                Employe admin = null;
+                if (idAdministrateur == 0)
+                    admin = gestionPersonnel.getRoot();
+                else {
+                    ligue.getEmployeById(idAdministrateur);
+                    ligue.setAdministrateur(admin);
+                }
 
                 // Ajout de la ligue à la liste des ligues
                 ligues.add(ligue);
@@ -60,7 +87,7 @@ public class LigueDAO {
         }
     }
 
-    public void insert(Ligue ligue) {
+    public LigueDAO insert(Ligue ligue) {
         String requete = "INSERT INTO ligue (nom_ligue, administrateur) VALUES (?, ?)";
         PreparedStatement instruction = null;
         ResultSet generatedKeys = null;
@@ -89,9 +116,10 @@ public class LigueDAO {
                 System.out.println("Erreur lors de la fermeture des ressources : " + e.getMessage());
             }
         }
+        return this;
     }
 
-    public void update(Ligue ligue) {
+    public LigueDAO update(Ligue ligue) {
         String requete = "UPDATE ligue SET nom_ligue = ?, administrateur = ? WHERE id_ligue = ?";
         try {
             PreparedStatement instruction = connection.prepareStatement(requete);
@@ -102,9 +130,10 @@ public class LigueDAO {
         } catch (SQLException e) {
             System.out.println("Erreur lors de la mise à jour de la ligue : " + e.getMessage());
         }
+        return this;
     }
 
-    public void delete(Ligue ligue) {
+    public LigueDAO delete(Ligue ligue) {
         String requete = "DELETE FROM ligue WHERE id_ligue = ?";
         PreparedStatement instruction = null;
         try {
@@ -124,6 +153,7 @@ public class LigueDAO {
                 }
             }
         }
+        return this;
     }
 
 }

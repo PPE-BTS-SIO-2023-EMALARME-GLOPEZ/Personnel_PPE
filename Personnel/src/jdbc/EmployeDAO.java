@@ -108,7 +108,7 @@ public class EmployeDAO {
     }
 
     public void delete(Employe employe) {
-        String requete = "DELETE FROM employe WHERE id = ?";
+        String requete = "DELETE FROM employe WHERE id_employe = ?";
         PreparedStatement instruction = null;
         try {
             instruction = connection.prepareStatement(requete);
@@ -128,7 +128,7 @@ public class EmployeDAO {
     }
 
     public TreeSet<Employe> getEmployesByLigue(Ligue ligue) {
-        String requete = "SELECT * FROM employe WHERE ligue_id = ?";
+        String requete = "SELECT * FROM employe WHERE id_ligue = ?";
         TreeSet<Employe> employes = new TreeSet<>();
         GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
         PreparedStatement instruction = null;
@@ -147,7 +147,9 @@ public class EmployeDAO {
                 String mail = resultSet.getString("mail");
 
                 LocalDate date_arrivee = resultSet.getDate("date_arrivee").toLocalDate();
-                LocalDate date_depart = resultSet.getDate("date_depart").toLocalDate();
+                LocalDate date_depart = resultSet.getDate("date_depart") != null
+                        ? resultSet.getDate("date_depart").toLocalDate()
+                        : null;
 
                 // On crée l'employe
                 Employe employe = new Employe(gestionPersonnel, ligue, nom, prenom, mail, password, date_arrivee,

@@ -56,6 +56,10 @@ public class GestionPersonnel implements Serializable {
 		passerelle.sauvegarderGestionPersonnel(this);
 	}
 
+	public static Passerelle getPasserelle() {
+		return GestionPersonnel.passerelle;
+	}
+
 	/**
 	 * Retourne la ligue dont administrateur est l'administrateur,
 	 * null s'il n'est pas un administrateur.
@@ -81,6 +85,16 @@ public class GestionPersonnel implements Serializable {
 		return Collections.unmodifiableSortedSet(ligues);
 	}
 
+	/**
+	 * Initialise les ligues de l'objet gestionPersonnel courant avec les ligues
+	 * récupérées en base de donnée.
+	 * 
+	 * @param ligues
+	 */
+	public void setLigues(TreeSet<Ligue> ligues) {
+		this.ligues = ligues;
+	}
+
 	public Ligue addLigue(String nom) throws SauvegardeImpossible {
 		Ligue ligue = new Ligue(this, nom);
 		ligues.add(ligue);
@@ -90,6 +104,7 @@ public class GestionPersonnel implements Serializable {
 	public Ligue addLigue(int id, String nom) {
 		Ligue ligue = new Ligue(this, id, nom);
 		ligues.add(ligue);
+		LigueDAO.connect().update(ligue);
 		return ligue;
 	}
 

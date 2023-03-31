@@ -46,6 +46,9 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	}
 
 	public void initEmployes(TreeSet<Employe> employes) {
+		System.err.println(
+				"[in Ligue initEmployes()] Nombre d'employes dans la ligue de " + this.getNom() + " : "
+						+ employes.size());
 		this.employes = employes;
 	}
 
@@ -104,15 +107,19 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 	 */
 
 	public SortedSet<Employe> getEmployes() {
-		return Collections.unmodifiableSortedSet(employes);
+		System.err.println(
+				"[in Ligue getEmployes] Nombre d'employes dans la ligue de " + this.getNom() + " : " + employes.size());
+		return Collections.unmodifiableSortedSet(this.employes);
 	}
 
-	public ArrayList<Employe> getEmployes1() {
-		ArrayList<Employe> employesList = new ArrayList<>();
-		for (Employe employe : employes)
-			employesList.add(employe);
-		return employesList;
-	}
+	/*
+	 * public ArrayList<Employe> getEmployes1() {
+	 * ArrayList<Employe> employesList = new ArrayList<>();
+	 * for (Employe employe : employes)
+	 * employesList.add(employe);
+	 * return employesList;
+	 * }
+	 */
 
 	public Employe getEmployeById(int id) {
 		for (Employe employe : employes) {
