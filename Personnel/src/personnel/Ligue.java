@@ -107,15 +107,6 @@ public class Ligue implements Serializable, Comparable<Ligue> {
 		return Collections.unmodifiableSortedSet(this.employes);
 	}
 
-	/*
-	 * public ArrayList<Employe> getEmployes1() {
-	 * ArrayList<Employe> employesList = new ArrayList<>();
-	 * for (Employe employe : employes)
-	 * employesList.add(employe);
-	 * return employesList;
-	 * }
-	 */
-
 	public Employe getEmployeById(int id) {
 		for (Employe employe : employes) {
 			if (employe.getId() == id) {

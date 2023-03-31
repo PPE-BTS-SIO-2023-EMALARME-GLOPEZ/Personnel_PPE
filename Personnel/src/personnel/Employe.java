@@ -246,13 +246,14 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	@Override
 	public String toString() {
-		String res = null;
+		String res = "\n" + nom + " " + prenom + " ";
 		if (estRoot())
-			res += "(super-utilisateur )";
+			res += "(super-utilisateur)";
 		else
-			res += "(" + ligue.toString() + ")";
+			res += "(Ligue de " + ligue.toString() + ")";
 
-		res += nom + " " + prenom + " " + mail + " arrivé le : " + dateArrivee + " depart le : " + dateDepart + "\n";
+		res += "\nContact : " + mail + "\nArrivé le : " + dateArrivee + "\nDepart le : "
+				+ dateDepart + "\n";
 		return res;
 	}
 }

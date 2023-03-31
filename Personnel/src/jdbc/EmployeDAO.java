@@ -145,12 +145,11 @@ public class EmployeDAO {
                 String prenom = resultSet.getString("prenom_employe");
                 String password = resultSet.getString("password");
                 String mail = resultSet.getString("mail");
-
+                // On fixe les dates d'arrivée et départ
                 LocalDate date_arrivee = resultSet.getDate("date_arrivee").toLocalDate();
                 LocalDate date_depart = resultSet.getDate("date_depart") != null
                         ? resultSet.getDate("date_depart").toLocalDate()
                         : null;
-
                 // On crée l'employe
                 Employe employe = new Employe(gestionPersonnel, ligue, nom, prenom, mail, password, date_arrivee,
                         date_depart);
