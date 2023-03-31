@@ -6,34 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.TreeSet;
 
-import org.junit.Test;
-
 import personnel.*;
 
 public class LigueDAO {
 
     private Connection connection;
 
-    public LigueDAO(Connection connection) {
-        this.connection = connection;
+    public LigueDAO() {
+        JDBC jdbc = (JDBC) GestionPersonnel.getPasserelle();
+        this.connection = jdbc.getConnection();
     }
 
     public static LigueDAO connect() {
-        JDBC jdbc = (JDBC) GestionPersonnel.getPasserelle();
-        Connection connection = jdbc.getConnection();
-        return new LigueDAO(connection);
-    }
-
-    public static void disconnect() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Déconnexion réussie !");
-            } catch (SQLException e) {
-                System.out.println("Impossible de se déconnecter de la base de données.");
-                e.printStackTrace();
-            }
-        }
+        return new LigueDAO();
     }
 
     public TreeSet<Ligue> init() {
