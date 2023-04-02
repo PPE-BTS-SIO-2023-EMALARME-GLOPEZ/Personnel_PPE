@@ -127,11 +127,4 @@ public class GestionPersonnel implements Serializable {
 		return root;
 	}
 
-	public void setRoot() {
-		try {
-			GestionPersonnel.passerelle.setRoot(root);
-		} catch (SauvegardeImpossible exception) {
-			System.out.println("Erreur lors de la sauvegarde du root : " + exception.getMessage());
-		}
-	}
 }

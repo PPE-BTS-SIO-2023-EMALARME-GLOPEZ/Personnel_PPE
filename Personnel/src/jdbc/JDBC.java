@@ -27,6 +27,7 @@ public class JDBC implements Passerelle {
 	@Override
 	public GestionPersonnel getGestionPersonnel() {
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
+		getOrCreateRoot();
 		gestionPersonnel.setLigues(LigueDAO.connect().init());
 		return gestionPersonnel;
 	}
@@ -66,6 +67,7 @@ public class JDBC implements Passerelle {
 		try {
 			PreparedStatement requete = connection.prepareStatement(
 					"insert into employe (nom_employe, prenom_employe, mail, password) values(?,?,?,?)");
+
 			requete.setString(1, root.getNom());
 			requete.setString(2, root.getPrenom());
 			requete.setString(3, root.getMail());
@@ -74,6 +76,27 @@ public class JDBC implements Passerelle {
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		}
+	}
+
+	public Employe getOrCreateRoot() {
+		Employe root = null;
+		try {
+			PreparedStatement requete = connection.prepareStatement("select * from employe where nom_employe = ?");
+			requete.setString(1, "root");
+			ResultSet resultat = requete.executeQuery();
+			if (resultat.next()) {
+				// Le root existe déjà en base de données, on récupére son ID pour le donner à
+				// l'objet root
+				GestionPersonnel.getGestionPersonnel().getRoot().setId(resultat.getInt("id_employe"));
+			} else {
+				// Le root n'existe pas encore en base de données, on le crée
+				root = GestionPersonnel.getGestionPersonnel().getRoot();
+				setRoot(root);
+			}
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		return root;
 	}
 
 	public Connection getConnection() {
