@@ -47,9 +47,10 @@ public class LigueDAO {
                 int idAdministrateur = resultSet.getInt("administrateur");
 
                 Employe admin = null;
-                if (idAdministrateur == 0)
+                if (idAdministrateur == 0) {
                     admin = gestionPersonnel.getRoot();
-                else {
+                    ligue.setAdministrateur(admin);
+                } else {
                     admin = ligue.getEmployeById(idAdministrateur);
                     ligue.setAdministrateur(admin);
                 }
