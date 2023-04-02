@@ -221,6 +221,10 @@ public class Employe implements Serializable, Comparable<Employe> {
 		return ligue;
 	}
 
+	public boolean hasLigue() {
+		return this.getLigue() != null;
+	}
+
 	/**
 	 * Supprime l'employé. Si celui-ci est un administrateur, le root
 	 * récupère les droits d'administration sur sa ligue.

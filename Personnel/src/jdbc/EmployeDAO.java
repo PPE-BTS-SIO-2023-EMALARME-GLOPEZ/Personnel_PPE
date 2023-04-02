@@ -79,7 +79,6 @@ public class EmployeDAO {
 
         PreparedStatement instruction = null;
         String requete = "UPDATE employe SET nom_employe = ?, prenom_employe = ?, password = ?, mail = ?, date_depart = ?, date_arrivee = ?, id_ligue = ? WHERE id_employe = ? ";
-
         try {
             instruction = connection.prepareStatement(requete);
 
@@ -91,7 +90,12 @@ public class EmployeDAO {
             instruction.setDate(5, EmployeDAO.toSqlDate(employe.getDateArrivee()));
             instruction.setDate(6, EmployeDAO.toSqlDate(employe.getDateDepart()));
 
-            instruction.setInt(7, employe.getLigue().getId());
+            if (employe.hasLigue())
+                instruction.setInt(7, (employe.getLigue().getId()));
+            else
+                instruction.setNull(7, java.sql.Types.BIGINT);
+
+            instruction.setInt(8, employe.getId());
 
             instruction.executeUpdate();
         } catch (SQLException exception) {
