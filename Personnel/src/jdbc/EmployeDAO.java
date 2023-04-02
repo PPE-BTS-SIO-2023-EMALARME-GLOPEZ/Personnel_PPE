@@ -19,7 +19,7 @@ public class EmployeDAO {
         this.connection = jdbc.getConnection();
     }
 
-    public static EmployeDAO connect() {
+    public static EmployeDAO make() {
         return new EmployeDAO();
     }
 

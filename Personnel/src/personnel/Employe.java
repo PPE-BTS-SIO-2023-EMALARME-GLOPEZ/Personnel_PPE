@@ -69,7 +69,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setDateDepart(LocalDate dateDepart) {
 		this.dateDepart = dateDepart;
-		EmployeDAO.connect().update(this);
+		EmployeDAO.make().update(this);
 	}
 
 	public LocalDate getDateDepart() {
@@ -118,7 +118,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setNom(String nom) {
 		this.nom = nom;
-		EmployeDAO.connect().update(this);
+		EmployeDAO.make().update(this);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
-		EmployeDAO.connect().update(this);
+		EmployeDAO.make().update(this);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setMail(String mail) {
 		this.mail = mail;
-		EmployeDAO.connect().update(this);
+		EmployeDAO.make().update(this);
 	}
 
 	public String getPassword() {
@@ -208,7 +208,7 @@ public class Employe implements Serializable, Comparable<Employe> {
 
 	public void setPassword(String password) {
 		this.password = password;
-		EmployeDAO.connect().update(this);
+		EmployeDAO.make().update(this);
 	}
 
 	/**

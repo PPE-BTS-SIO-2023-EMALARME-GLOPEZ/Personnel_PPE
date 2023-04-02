@@ -28,7 +28,7 @@ public class JDBC implements Passerelle {
 	public GestionPersonnel getGestionPersonnel() {
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		getOrCreateRoot();
-		gestionPersonnel.setLigues(LigueDAO.connect().init());
+		gestionPersonnel.setLigues(LigueDAO.make().init());
 		return gestionPersonnel;
 	}
 
