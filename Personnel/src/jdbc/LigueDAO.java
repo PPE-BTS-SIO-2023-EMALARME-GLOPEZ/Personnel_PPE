@@ -45,9 +45,8 @@ public class LigueDAO {
 
                 // Ajout de l'administrateur
                 int idAdministrateur = resultSet.getInt("administrateur");
-
                 Employe admin = null;
-                if (idAdministrateur == 0) {
+                if (idAdministrateur == 0 || idAdministrateur == 3) {
                     admin = gestionPersonnel.getRoot();
                     ligue.setAdministrateur(admin);
                 } else {
